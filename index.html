@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TutorLink</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sage: #4a7c59;
+  --sage-light: #e8f0eb;
+  --sage-mid: #c2d9c9;
+  --sage-dark: #2d5240;
+  --cream: #faf8f4;
+  --warm-white: #ffffff;
+  --ink: #1a1a18;
+  --ink-light: #4a4a46;
+  --ink-muted: #8a8a84;
+  --border: #e2ddd6;
+  --amber: #d4832a;
+  --amber-light: #fdf3e7;
+  --red-soft: #e85555;
+  --red-light: #fdeaea;
+  --blue-soft: #3a7bd5;
+  --blue-light: #eaf1fd;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(26,26,24,0.08);
+  --shadow-lg: 0 8px 40px rgba(26,26,24,0.12);
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── NAV ── */
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 2rem;
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-logo { font-family: var(--serif); font-size: 1.5rem; color: var(--ink); letter-spacing: -0.02em; }
+.nav-logo span { color: var(--sage); }
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  padding: 10px 20px; border-radius: 99px; border: none; cursor: pointer;
+  transition: all 0.15s ease; display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none;
+}
+.btn-primary { background: var(--sage); color: white; }
+.btn-primary:hover { background: var(--sage-dark); transform: translateY(-1px); }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--ink); }
+.btn-outline:hover { border-color: var(--sage); color: var(--sage); }
+.btn-ghost { background: transparent; color: var(--ink-light); padding: 8px 14px; }
+.btn-ghost:hover { background: var(--sage-light); color: var(--sage); }
+.btn-large { padding: 14px 32px; font-size: 16px; }
+.btn-full { width: 100%; justify-content: center; }
+.btn-danger { background: var(--red-light); color: var(--red-soft); border: 1.5px solid #f5c6c6; }
+.btn-danger:hover { background: #f8d7d7; }
+
+/* ── LANDING ── */
+#landing {
+  background: var(--cream);
+}
+.hero {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 5rem 2rem 4rem;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(ellipse, rgba(74,124,89,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--sage-light); color: var(--sage-dark);
+  font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 99px;
+  margin-bottom: 1.5rem;
+}
+.hero-dot { width: 6px; height: 6px; background: var(--sage); border-radius: 50%; }
+.hero h1 {
+  font-family: var(--serif); font-size: clamp(2.8rem, 6vw, 4.5rem);
+  line-height: 1.1; letter-spacing: -0.03em; color: var(--ink);
+  max-width: 700px; margin-bottom: 1.25rem;
+}
+.hero h1 em { font-style: italic; color: var(--sage); }
+.hero p {
+  font-size: 1.1rem; color: var(--ink-light); max-width: 480px;
+  line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300;
+}
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+.stats-row {
+  display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+  padding: 2.5rem 2rem;
+  border-top: 1px solid var(--border);
+  background: var(--warm-white);
+}
+.stat { text-align: center; }
+.stat-num { font-family: var(--serif); font-size: 2rem; color: var(--sage); display: block; }
+.stat-label { font-size: 13px; color: var(--ink-muted); margin-top: 2px; }
+
+/* ── SIGN IN / SIGN UP SCREENS ── */
+.auth-wrap {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.auth-card {
+  background: var(--warm-white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 2.5rem;
+  width: 100%; max-width: 420px; box-shadow: var(--shadow-lg);
+}
+.auth-card h2 { font-family: var(--serif); font-size: 1.75rem; margin-bottom: 0.5rem; }
+.auth-card p { color: var(--ink-light); font-size: 14px; margin-bottom: 2rem; font-weight: 300; }
+
+.role-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+.role-card {
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  padding: 1.25rem 1rem; text-align: center; cursor: pointer;
+  transition: all 0.15s ease; background: var(--cream);
+}
+.role-card:hover { border-color: var(--sage-mid); }
+.role-card.selected { border-color: var(--sage); background: var(--sage-light); }
+.role-icon { font-size: 2rem; margin-bottom: 8px; }
+.role-card strong { display: block; font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.role-card span { font-size: 12px; color: var(--ink-muted); }
+
+.form-group { margin-bottom: 1.25rem; }
+.form-label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--ink-light); }
+.form-input {
+  width: 100%; padding: 11px 14px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-family: var(--sans); font-size: 14px;
+  background: var(--cream); color: var(--ink); transition: border-color 0.15s;
+  outline: none;
+}
+.form-input:focus { border-color: var(--sage); background: white; }
+
+.divider { display: flex; align-items: center; gap: 12px; margin: 1.25rem 0; color: var(--ink-muted); font-size: 13px; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.btn-google {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 11px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: white; cursor: pointer; font-family: var(--sans); font-size: 14px;
+  font-weight: 500; transition: border-color 0.15s; color: var(--ink);
+}
+.btn-google:hover { border-color: var(--ink-muted); }
+.btn-google svg { width: 18px; height: 18px; }
+
+.auth-switch { text-align: center; margin-top: 1.5rem; font-size: 13px; color: var(--ink-muted); }
+.auth-switch a { color: var(--sage); text-decoration: none; font-weight: 500; cursor: pointer; }
+
+/* ── TUTOR SETUP ── */
+.setup-wrap { flex: 1; padding: 2rem; max-width: 640px; margin: 0 auto; width: 100%; }
+.setup-step { display: none; }
+.setup-step.active { display: block; }
+.step-indicator { display: flex; gap: 6px; margin-bottom: 2rem; }
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+.step-dot.done { background: var(--sage); }
+.step-dot.active { background: var(--sage); width: 24px; border-radius: 4px; }
+.setup-wrap h2 { font-family: var(--serif); font-size: 2rem; margin-bottom: 0.5rem; }
+.setup-wrap > .setup-step > p { color: var(--ink-light); font-size: 15px; margin-bottom: 2rem; font-weight: 300; }
+
+.subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-bottom: 1.5rem; }
+.subject-pill {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 13px; font-weight: 500; text-align: center;
+  transition: all 0.15s; background: var(--cream); color: var(--ink);
+}
+.subject-pill:hover { border-color: var(--sage-mid); }
+.subject-pill.selected { background: var(--sage-light); border-color: var(--sage); color: var(--sage-dark); }
+
+.level-group { margin-bottom: 1.5rem; }
+.level-group-title { font-size: 13px; font-weight: 600; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.level-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.level-chip {
+  padding: 6px 12px; border: 1.5px solid var(--border); border-radius: 99px;
+  cursor: pointer; font-size: 12px; font-weight: 500;
+  transition: all 0.15s; background: var(--cream);
+}
+.level-chip.selected { background: var(--sage); border-color: var(--sage); color: white; }
+
+/* ── CALENDAR ── */
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 1.5rem; }
+.cal-day-label { text-align: center; font-size: 11px; font-weight: 600; color: var(--ink-muted); padding: 4px 0; text-transform: uppercase; letter-spacing: 0.05em; }
+.time-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.time-row-label { grid-column: span 7; font-size: 12px; color: var(--ink-muted); padding: 8px 0 4px; font-weight: 500; }
+.time-slot {
+  aspect-ratio: 1; border-radius: 6px; border: 1.5px solid var(--border);
+  cursor: pointer; background: white; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500;
+}
+.time-slot:hover { border-color: var(--sage-mid); background: var(--sage-light); }
+.time-slot.selected { background: var(--sage); border-color: var(--sage); color: white; }
+.time-slot.full { background: var(--border); border-color: var(--border); color: var(--ink-muted); cursor: not-allowed; }
+
+/* ── TUTOR DASHBOARD ── */
+#tutor-dashboard { background: var(--cream); }
+.dashboard-layout { display: grid; grid-template-columns: 220px 1fr; flex: 1; }
+.sidebar {
+  background: var(--warm-white); border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 4px;
+}
+.sidebar-user { padding: 0.75rem 0.75rem 1.25rem; border-bottom: 1px solid var(--border); margin-bottom: 0.75rem; }
+.avatar {
+  width: 42px; height: 42px; border-radius: 50%; background: var(--sage-light);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 1.1rem; color: var(--sage-dark); font-weight: 600;
+  margin-bottom: 8px;
+}
+.sidebar-user strong { display: block; font-size: 14px; font-weight: 600; }
+.sidebar-user span { font-size: 12px; color: var(--ink-muted); }
+.sidebar-link {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; font-weight: 500;
+  color: var(--ink-light); transition: all 0.12s; text-decoration: none;
+}
+.sidebar-link:hover { background: var(--sage-light); color: var(--sage); }
+.sidebar-link.active { background: var(--sage-light); color: var(--sage-dark); }
+.sidebar-icon { width: 18px; height: 18px; opacity: 0.7; }
+.badge-count {
+  margin-left: auto; background: var(--sage); color: white;
+  font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 99px;
+}
+
+.main-content { padding: 2rem; overflow-y: auto; }
+.page-title { font-family: var(--serif); font-size: 2rem; margin-bottom: 0.25rem; }
+.page-subtitle { color: var(--ink-light); font-size: 14px; margin-bottom: 2rem; }
+
+.tab-bar { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 2rem; }
+.tab-btn {
+  padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer;
+  border: none; background: none; color: var(--ink-muted);
+  border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.12s;
+}
+.tab-btn.active { color: var(--sage); border-bottom-color: var(--sage); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.student-card {
+  background: var(--warm-white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.25rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 10px;
+  transition: box-shadow 0.15s;
+}
+.student-card:hover { box-shadow: var(--shadow); }
+.student-info { flex: 1; }
+.student-info strong { display: block; font-size: 15px; margin-bottom: 2px; }
+.student-info span { font-size: 13px; color: var(--ink-muted); }
+.session-time { font-size: 13px; color: var(--sage); font-weight: 500; }
+
+.request-card {
+  background: var(--warm-white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.25rem; margin-bottom: 10px;
+}
+.request-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.request-card-header strong { font-size: 15px; }
+.request-actions { display: flex; gap: 8px; margin-top: 12px; }
+.timer-badge { font-size: 12px; color: var(--amber); background: var(--amber-light); padding: 3px 10px; border-radius: 99px; font-weight: 500; }
+
+.listing-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--warm-white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.toggle-switch {
+  width: 44px; height: 24px; background: var(--border); border-radius: 99px;
+  cursor: pointer; position: relative; transition: background 0.2s;
+}
+.toggle-switch.on { background: var(--sage); }
+.toggle-knob {
+  width: 18px; height: 18px; background: white; border-radius: 50%;
+  position: absolute; top: 3px; left: 3px; transition: transform 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+.toggle-switch.on .toggle-knob { transform: translateX(20px); }
+
+/* ── STUDENT MATCHING ── */
+#student-matching { background: var(--cream); }
+.matching-header {
+  background: var(--warm-white); border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+}
+.matching-header h2 { font-family: var(--serif); font-size: 1.75rem; margin-bottom: 1rem; }
+.filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.filter-select {
+  padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 99px;
+  font-family: var(--sans); font-size: 13px; font-weight: 500; background: var(--cream);
+  cursor: pointer; outline: none; color: var(--ink);
+}
+.filter-select:focus { border-color: var(--sage); }
+
+.tutors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; padding: 2rem; }
+.tutor-card {
+  background: var(--warm-white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.5rem; cursor: pointer; transition: all 0.15s;
+}
+.tutor-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.tutor-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; }
+.tutor-avatar {
+  width: 48px; height: 48px; border-radius: 50%; background: var(--sage-light);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 1.2rem; color: var(--sage-dark);
+}
+.tutor-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--amber); }
+.tutor-name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.tutor-grade { font-size: 13px; color: var(--ink-muted); }
+.tutor-subjects { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+.subject-tag {
+  padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 500;
+  background: var(--sage-light); color: var(--sage-dark);
+}
+.tutor-avail { font-size: 13px; color: var(--ink-muted); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 6px; }
+.avail-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); }
+
+/* ── BOOKING MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(26,26,24,0.5);
+  z-index: 200; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: white; border-radius: var(--radius); padding: 2rem;
+  width: 100%; max-width: 440px; box-shadow: var(--shadow-lg);
+  animation: slideUp 0.2s ease;
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+.modal-header h3 { font-family: var(--serif); font-size: 1.5rem; }
+.modal-close { background: none; border: none; cursor: pointer; font-size: 1.5rem; color: var(--ink-muted); line-height: 1; }
+.time-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.5rem; }
+.slot-option {
+  padding: 10px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; font-size: 13px; font-weight: 500; text-align: center;
+  transition: all 0.12s;
+}
+.slot-option:hover { border-color: var(--sage-mid); }
+.slot-option.selected { border-color: var(--sage); background: var(--sage-light); color: var(--sage-dark); }
+.slot-option.unavailable { opacity: 0.4; cursor: not-allowed; color: var(--ink-muted); background: var(--cream); }
+
+.info-box { background: var(--amber-light); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; color: #7a5012; margin-bottom: 1.5rem; line-height: 1.6; }
+
+/* ── CONFIRMATION ── */
+.confirm-screen { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.confirm-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 3rem 2.5rem; text-align: center; max-width: 400px; box-shadow: var(--shadow-lg); }
+.confirm-icon { width: 64px; height: 64px; background: var(--sage-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem; }
+.confirm-card h2 { font-family: var(--serif); font-size: 2rem; margin-bottom: 0.75rem; }
+.confirm-card p { color: var(--ink-light); font-size: 15px; line-height: 1.7; margin-bottom: 2rem; }
+
+/* ── UTILITY ── */
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.text-muted { color: var(--ink-muted); font-size: 13px; }
+.section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-muted); margin-bottom: 8px; display: block; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .dashboard-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .tutors-grid { grid-template-columns: 1fr; padding: 1rem; }
+  .hero h1 { font-size: 2.4rem; }
+  .stats-row { gap: 1.5rem; }
+}
+
+/* page-in animation */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.screen.active { animation: fadeIn 0.25s ease; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════ LANDING ════════════════ -->
+<div id="landing" class="screen active">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="goto('signin')">Sign in</button>
+    </div>
+  </nav>
+  <div class="hero">
+    <div class="hero-tag"><span class="hero-dot"></span> K–12 peer tutoring</div>
+    <h1>Learning that <em>actually</em> clicks</h1>
+    <p>Connect with student tutors who get it — because they just went through it. Real help, real availability, no guessing.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-primary btn-large" onclick="landingSignup('student')">Find a tutor</button>
+      <button class="btn btn-outline btn-large" onclick="landingSignup('tutor')">Become a tutor</button>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat"><span class="stat-num">42</span><span class="stat-label">Active tutors</span></div>
+    <div class="stat"><span class="stat-num">128</span><span class="stat-label">Sessions this month</span></div>
+    <div class="stat"><span class="stat-num">4.9★</span><span class="stat-label">Avg. rating</span></div>
+    <div class="stat"><span class="stat-num">12</span><span class="stat-label">Subjects covered</span></div>
+  </div>
+</div>
+
+<!-- ════════════════ SIGN IN ════════════════ -->
+<div id="signin" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <button class="btn btn-ghost" onclick="goto('landing')">← Back</button>
+  </nav>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>Welcome back</h2>
+      <p>Sign in to your account to continue</p>
+      <button class="btn-google" onclick="goto('signup')">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="divider">or</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary btn-full mt-2" onclick="goto('student-matching')">Sign in</button>
+      <div class="auth-switch">Don't have an account? <a onclick="goto('signup')">Sign up</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SIGN UP ════════════════ -->
+<div id="signup" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <button class="btn btn-ghost" onclick="goto('landing')">← Back</button>
+  </nav>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2>Create account</h2>
+      <p>Join as a <strong id="signup-role-label">student</strong> — enter your details below.</p>
+      <button class="btn-google">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </button>
+      <div class="divider">or</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="Create a password">
+      </div>
+      <button class="btn btn-primary btn-full mt-2" id="signup-btn" onclick="handleSignup()">Continue</button>
+      <div class="auth-switch">Already have an account? <a onclick="goto('signin')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ TUTOR SETUP — INFO ════════════════ -->
+<div id="tutor-setup" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <button class="btn btn-ghost" onclick="goto('signup')">← Back</button>
+  </nav>
+  <div class="setup-wrap">
+    <div class="step-indicator">
+      <div class="step-dot active" id="dot-0"></div>
+      <div class="step-dot" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+    </div>
+
+    <!-- Step 0: Name + subjects -->
+    <div class="setup-step active" id="setup-step-0">
+      <h2>Tell us about you</h2>
+      <p>This shows on your tutor profile for students to browse.</p>
+      <div class="form-group">
+        <label class="form-label">Your name</label>
+        <input class="form-input" type="text" placeholder="First name is fine">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your grade</label>
+        <select class="form-input">
+          <option>8th grade</option><option>9th grade</option><option>10th grade</option>
+          <option>11th grade</option><option>12th grade</option>
+        </select>
+      </div>
+      <span class="section-label mt-2">Subjects you can tutor</span>
+      <div class="subject-grid" id="subject-picker">
+        <div class="subject-pill" onclick="togglePill(this)">Math</div>
+        <div class="subject-pill" onclick="togglePill(this)">English</div>
+        <div class="subject-pill" onclick="togglePill(this)">Writing</div>
+        <div class="subject-pill" onclick="togglePill(this)">History</div>
+        <div class="subject-pill" onclick="togglePill(this)">Biology</div>
+        <div class="subject-pill" onclick="togglePill(this)">Chemistry</div>
+        <div class="subject-pill" onclick="togglePill(this)">Physics</div>
+        <div class="subject-pill" onclick="togglePill(this)">Spanish</div>
+        <div class="subject-pill" onclick="togglePill(this)">French</div>
+        <div class="subject-pill" onclick="togglePill(this)">Mandarin</div>
+      </div>
+      <button class="btn btn-primary" onclick="nextSetupStep()">Next →</button>
+    </div>
+
+    <!-- Step 1: Calendar -->
+    <div class="setup-step" id="setup-step-1">
+      <h2>Set your availability</h2>
+      <p>Pick times you're free to tutor. Grey slots mean you've reached your student limit.</p>
+      <div style="overflow-x:auto;margin-bottom:1rem">
+        <div id="avail-grid" style="display:grid;grid-template-columns:56px repeat(7,1fr);gap:0;min-width:480px">
+          <!-- built by JS -->
+        </div>
+      </div>
+      <div class="text-muted mt-2">💡 You can always update this from your dashboard.</div>
+      <div style="display:flex;gap:10px;margin-top:1.5rem">
+        <button class="btn btn-outline" onclick="prevSetupStep()">← Back</button>
+        <button class="btn btn-primary" onclick="nextSetupStep()">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Done -->
+    <div class="setup-step" id="setup-step-2">
+      <div style="text-align:center;padding:3rem 0">
+        <div style="font-size:3.5rem;margin-bottom:1rem">🎉</div>
+        <h2 style="margin-bottom:0.75rem">You're all set!</h2>
+        <p style="color:var(--ink-light);font-size:15px;margin-bottom:2rem;line-height:1.7">Your tutor profile is live. Students can now find you and send requests. You'll get notified when someone wants to book.</p>
+        <button class="btn btn-primary btn-large" onclick="goto('tutor-dashboard')">Go to dashboard →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ TUTOR DASHBOARD ════════════════ -->
+<div id="tutor-dashboard" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="goto('landing')">Sign out</button>
+    </div>
+  </nav>
+  <div class="dashboard-layout" style="flex:1">
+    <aside class="sidebar">
+      <div class="sidebar-user">
+        <div class="avatar">JK</div>
+        <strong>Jordan K.</strong>
+        <span>11th grade · Math</span>
+      </div>
+      <a class="sidebar-link active" onclick="showDashTab('students')">
+        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        Students
+      </a>
+      <a class="sidebar-link" onclick="showDashTab('requests')" id="req-link">
+        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        Requests <span class="badge-count">2</span>
+      </a>
+      <a class="sidebar-link" onclick="showDashTab('account')">
+        <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Account
+      </a>
+    </aside>
+    <main class="main-content">
+      <!-- Students Tab -->
+      <div id="dash-students" class="tab-panel active">
+        <div class="page-title">Current students</div>
+        <div class="page-subtitle">3 active students this week</div>
+        <div class="student-card" onclick="viewStudentProfile('Alex L.','6th grade','Pre-Algebra','Mon 4:00 PM')" style="cursor:pointer">
+          <div class="avatar" style="width:40px;height:40px;font-size:1rem">AL</div>
+          <div class="student-info">
+            <strong>Alex L. · 6th grade</strong>
+            <span>Pre-Algebra</span>
+          </div>
+          <span class="session-time">Mon 4:00 PM</span>
+        </div>
+        <div class="student-card" onclick="viewStudentProfile('Maya P.','5th grade','Algebra I','Wed 3:30 PM')" style="cursor:pointer">
+          <div class="avatar" style="width:40px;height:40px;font-size:1rem;background:#fdf3e7;color:#7a5012">MP</div>
+          <div class="student-info">
+            <strong>Maya P. · 5th grade</strong>
+            <span>Algebra I</span>
+          </div>
+          <span class="session-time">Wed 3:30 PM</span>
+        </div>
+        <div class="student-card" onclick="viewStudentProfile('Sam R.','7th grade','Geometry','Fri 5:00 PM')" style="cursor:pointer">
+          <div class="avatar" style="width:40px;height:40px;font-size:1rem;background:#eaf1fd;color:#185fa5">SR</div>
+          <div class="student-info">
+            <strong>Sam R. · 7th grade</strong>
+            <span>Geometry</span>
+          </div>
+          <span class="session-time">Fri 5:00 PM</span>
+        </div>
+      </div>
+
+      <!-- Requests Tab -->
+      <div id="dash-requests" class="tab-panel">
+        <div class="page-title">Incoming requests</div>
+        <div class="page-subtitle">Respond within 48 hours or the request expires</div>
+        <div class="request-card">
+          <div class="request-card-header">
+            <strong style="cursor:pointer;color:var(--sage);text-decoration:underline;text-underline-offset:2px" onclick="viewStudentProfile('Casey M.','4th grade','Pre-Algebra','Tue 4:00 PM')">Casey M. · 4th grade</strong>
+            <span class="timer-badge">⏱ 31 hrs left</span>
+          </div>
+          <div class="text-muted">Subject: Pre-Algebra · Requested: Tue 4:00 PM</div>
+          <div class="request-actions">
+            <button class="btn btn-primary" onclick="acceptRequest(this)">Accept</button>
+            <button class="btn btn-danger" onclick="declineRequest(this)">Decline</button>
+          </div>
+        </div>
+        <div class="request-card">
+          <div class="request-card-header">
+            <strong style="cursor:pointer;color:var(--sage);text-decoration:underline;text-underline-offset:2px" onclick="viewStudentProfile('Riley T.','6th grade','Algebra I','Thu 3:00 PM')">Riley T. · 6th grade</strong>
+            <span class="timer-badge">⏱ 44 hrs left</span>
+          </div>
+          <div class="text-muted">Subject: Algebra I · Requested: Thu 3:00 PM</div>
+          <div class="request-actions">
+            <button class="btn btn-primary" onclick="acceptRequest(this)">Accept</button>
+            <button class="btn btn-danger" onclick="declineRequest(this)">Decline</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Tab -->
+      <div id="dash-account" class="tab-panel">
+        <div class="page-title">Account</div>
+        <div class="page-subtitle">Manage your listing and availability</div>
+        <span class="section-label">Listing status</span>
+        <div class="listing-toggle" style="margin-bottom:1.5rem">
+          <div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:2px">Accepting new students</div>
+            <div class="text-muted">Students can find and request you</div>
+          </div>
+          <div class="toggle-switch on" id="listing-toggle" onclick="toggleListing()">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+        <span class="section-label">Student limit per slot</span>
+        <div class="listing-toggle" style="margin-bottom:1.5rem">
+          <div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:2px">Max students per time slot</div>
+            <div class="text-muted">Slots at capacity show as grey to students</div>
+          </div>
+          <input type="number" min="1" max="10" value="2" class="form-input" style="width:70px;text-align:center" oninput="updateSlotLabel(this)">
+        </div>
+        <button class="btn btn-outline" onclick="editProfile()">Edit profile & availability</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ════════════════ STUDENT MATCHING ════════════════ -->
+<div id="student-matching" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="goto('landing')">Sign out</button>
+    </div>
+  </nav>
+  <div class="matching-header">
+    <h2>Find a tutor</h2>
+    <div class="filter-row">
+      <select class="filter-select" id="filter-subject" onchange="onSubjectChange()">
+        <option value="">All subjects</option>
+        <option value="Math">Math</option>
+        <option value="English">English</option>
+        <option value="Writing">Writing</option>
+        <option value="History">History</option>
+        <option value="Biology">Biology</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Physics">Physics</option>
+        <option value="Spanish">Spanish</option>
+        <option value="French">French</option>
+        <option value="Mandarin">Mandarin</option>
+      </select>
+      <select class="filter-select" id="filter-level" onchange="applyFilters()" style="display:none">
+        <option value="">All levels</option>
+      </select>
+      <div id="filter-days-wrap" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"></div>
+    </div>
+  </div>
+  <div class="tutors-grid" id="tutors-grid"></div>
+</div>
+
+<!-- ════════════════ TUTOR PROFILE ════════════════ -->
+<div id="tutor-profile" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="goto('student-matching')">← Back</button>
+    </div>
+  </nav>
+  <div style="max-width:680px;margin:0 auto;padding:2rem" id="profile-content">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- ════════════════ STUDENT PROFILE (tutor viewing) ════════════════ -->
+<div id="student-profile" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" id="student-profile-back" onclick="goto('tutor-dashboard')">← Back</button>
+    </div>
+  </nav>
+  <div style="max-width:600px;margin:0 auto;padding:2rem" id="student-profile-content">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- ════════════════ BOOKING MODAL ════════════════ -->
+<div class="modal-overlay" id="booking-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-tutor-name">Book Jordan K.</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <span class="section-label">Pick a time slot</span>
+    <div class="time-slots">
+      <div class="slot-option" onclick="selectSlot(this)">Mon 3:30 PM</div>
+      <div class="slot-option" onclick="selectSlot(this)">Mon 4:30 PM</div>
+      <div class="slot-option unavailable">Tue 3:30 PM</div>
+      <div class="slot-option" onclick="selectSlot(this)">Wed 4:00 PM</div>
+      <div class="slot-option" onclick="selectSlot(this)">Thu 3:30 PM</div>
+      <div class="slot-option unavailable">Fri 4:00 PM</div>
+    </div>
+    <div class="info-box">
+      ⏳ Your request will be sent to the tutor. If they don't respond within <strong>48 hours</strong>, the request will expire and you'll be notified.
+    </div>
+    <button class="btn btn-primary btn-full" onclick="sendRequest()">Send request</button>
+  </div>
+</div>
+
+<!-- ════════════════ CONFIRMATION ════════════════ -->
+<div id="confirmation" class="screen">
+  <nav class="nav">
+    <div class="nav-logo">Tutor<span>Link</span></div>
+  </nav>
+  <div class="confirm-screen">
+    <div class="confirm-card">
+      <div class="confirm-icon">📬</div>
+      <h2>Request sent!</h2>
+      <p>Your tutoring request has been sent. You'll receive a notification once the tutor responds — they have 48 hours to accept.</p>
+      <button class="btn btn-primary btn-large" onclick="goto('student-matching')">Browse more tutors</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Subject → levels map ──
+const subjectLevels = {
+  Math:      ['Pre-Algebra','Algebra I','Algebra II','Geometry','Pre-Calc','Calculus','AP Calculus','Statistics','AP Statistics','Honors Math'],
+  English:   ['Regular English','Honors English','AP English Language','AP English Literature'],
+  Writing:   ['Regular Writing','Honors Writing','AP Writing'],
+  History:   ['Regular History','Honors History','AP US History','AP World History','AP Government'],
+  Biology:   ['Regular Biology','Honors Biology','AP Biology'],
+  Chemistry: ['Regular Chemistry','Honors Chemistry','AP Chemistry'],
+  Physics:   ['Regular Physics','Honors Physics','AP Physics 1','AP Physics 2','AP Physics C'],
+  Spanish:   ['Spanish 1','Spanish 2','Spanish 3','AP Spanish'],
+  French:    ['French 1','French 2','French 3','AP French'],
+  Mandarin:  ['Mandarin 1','Mandarin 2','Mandarin 3','AP Mandarin'],
+};
+
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+const tutorData = [
+  { name:'Jordan K.', initials:'JK', grade:'11th grade',
+    subjects:['Math','Physics'], levels:['Pre-Algebra','Algebra I','Geometry','Regular Physics','Honors Physics'],
+    availDays:['Mon','Wed','Thu'], availDesc:'Mon, Wed, Thu afternoons',
+    rating:'4.9', color:'var(--sage-light)', textColor:'var(--sage-dark)',
+    bio:'Junior at Lincoln High. Got a 5 on AP Calc BC and love making math click for younger students. Patient and organized.',
+    reviews:[{name:'Alex L.',text:'Jordan explained algebra in a way that finally made sense to me. 10/10.',stars:5},{name:'Parent of Maya P.',text:'Our daughter went from a C to an A in one semester. Highly recommend.',stars:5}]},
+  { name:'Priya M.', initials:'PM', grade:'10th grade',
+    subjects:['English','Writing','History'], levels:['Regular English','Honors English','AP English Language','Regular History','Honors History','AP US History'],
+    availDays:['Tue','Fri','Sat','Sun'], availDesc:'Tue, Fri afternoons + weekends',
+    rating:'5.0', color:'#fdf3e7', textColor:'#7a5012',
+    bio:'Sophomore passionate about literature and writing. Published in the school literary journal twice. Great at essay structure and close reading.',
+    reviews:[{name:'Sam R.',text:'She helped me rewrite my college essay and it was so much better.',stars:5},{name:'Parent of Casey M.',text:'Very professional and punctual. My son loves working with her.',stars:5}]},
+  { name:'Ethan S.', initials:'ES', grade:'12th grade',
+    subjects:['Math','Chemistry'], levels:['Algebra II','Pre-Calc','Calculus','AP Calculus','Regular Chemistry','Honors Chemistry','AP Chemistry'],
+    availDays:['Mon','Tue','Wed','Thu'], availDesc:'Mon–Thu evenings',
+    rating:'4.8', color:'#eaf1fd', textColor:'#185fa5',
+    bio:'Senior heading to MIT next fall. Strong in STEM, especially math and chemistry. Uses real-world examples to explain abstract concepts.',
+    reviews:[{name:'Parent of Riley T.',text:'Ethan is fantastic. Explained stoichiometry better than the teacher.',stars:5},{name:'Maya P.',text:'Super smart and actually explains his work. Would book again.',stars:4}]},
+  { name:'Ava T.', initials:'AT', grade:'9th grade',
+    subjects:['Spanish','English'], levels:['Spanish 1','Spanish 2','Spanish 3','Regular English','Honors English'],
+    availDays:['Wed','Thu','Sat'], availDesc:'Wed, Thu, Sat',
+    rating:'4.9', color:'#fdeaea', textColor:'#a32d2d',
+    bio:'Native Spanish speaker, born in Bogotá. Fluent in both English and Spanish. Great at conversational practice and grammar.',
+    reviews:[{name:'Alex L.',text:'Ava makes Spanish feel easy and fun. My pronunciation has improved a lot.',stars:5}]},
+  { name:'Marcus L.', initials:'ML', grade:'11th grade',
+    subjects:['Biology','Chemistry'], levels:['Regular Biology','Honors Biology','AP Biology','Regular Chemistry'],
+    availDays:['Tue','Thu','Sun'], availDesc:'Tue, Thu, Sun',
+    rating:'4.7', color:'#eaf3de', textColor:'#27500a',
+    bio:'Biology nerd. Placed 2nd in the state science fair. Breaks down complex processes (cell division, osmosis) into clear, memorable steps.',
+    reviews:[{name:'Parent of Sam R.',text:'Marcus is patient and thorough. My son finally understands photosynthesis.',stars:5}]},
+  { name:'Zoe W.', initials:'ZW', grade:'10th grade',
+    subjects:['Math','English','French'], levels:['Pre-Algebra','Algebra I','Regular English','French 1','French 2','French 3'],
+    availDays:['Mon','Wed','Fri'], availDesc:'Mon, Wed, Fri',
+    rating:'5.0', color:'var(--sage-light)', textColor:'var(--sage-dark)',
+    bio:'Trilingual (English, French, Mandarin). Math tutor since 8th grade with 30+ sessions. Very patient with younger learners.',
+    reviews:[{name:'Parent of Alex L.',text:'Zoe is wonderful. She adapts to how my daughter learns.',stars:5},{name:'Casey M.',text:'She explains things step by step and never makes me feel dumb.',stars:5}]},
+];
+
+// ── Render tutor cards ──
+function renderTutors(data) {
+  const grid = document.getElementById('tutors-grid');
+  if (!data.length) { grid.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--ink-muted);font-size:15px;grid-column:1/-1">No tutors match your filters. Try adjusting your search.</div>'; return; }
+  grid.innerHTML = data.map(t => `
+    <div class="tutor-card">
+      <div class="tutor-card-header">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="tutor-avatar" style="background:${t.color};color:${t.textColor}">${t.initials}</div>
+          <div>
+            <div class="tutor-name" style="cursor:pointer;color:var(--sage);text-decoration:underline;text-underline-offset:2px" onclick="viewTutorProfile('${t.name}')">${t.name}</div>
+            <div class="tutor-grade">${t.grade}</div>
+          </div>
+        </div>
+        <div class="tutor-rating">★ ${t.rating}</div>
+      </div>
+      <div class="tutor-subjects">${t.subjects.map(s=>`<span class="subject-tag">${s}</span>`).join('')}</div>
+      <div style="font-size:12px;color:var(--ink-muted);margin-bottom:0.75rem">${t.levels.slice(0,4).join(' · ')}${t.levels.length>4?' · …':''}</div>
+      <div class="tutor-avail"><span class="avail-dot"></span>${t.availDesc}</div>
+      <button class="btn btn-outline btn-full" style="font-size:13px;padding:9px" onclick="openBooking('${t.name}')">Request session</button>
+    </div>`).join('');
+}
+renderTutors(tutorData);
+
+// ── Day filter pills ──
+let activeDays = new Set();
+function buildDayPills() {
+  const wrap = document.getElementById('filter-days-wrap');
+  wrap.innerHTML = DAYS.map(d => `<div class="day-pill" id="daypill-${d}" onclick="toggleDay('${d}')" style="padding:6px 12px;border:1.5px solid var(--border);border-radius:99px;font-size:13px;font-weight:500;cursor:pointer;background:var(--cream);transition:all 0.12s">${d}</div>`).join('');
+}
+buildDayPills();
+
+function toggleDay(d) {
+  if (activeDays.has(d)) { activeDays.delete(d); }
+  else { activeDays.add(d); }
+  const pill = document.getElementById('daypill-'+d);
+  if (activeDays.has(d)) { pill.style.background='var(--sage)'; pill.style.borderColor='var(--sage)'; pill.style.color='white'; }
+  else { pill.style.background='var(--cream)'; pill.style.borderColor='var(--border)'; pill.style.color=''; }
+  applyFilters();
+}
+
+// ── Subject change: show/hide level dropdown ──
+function onSubjectChange() {
+  const subj = document.getElementById('filter-subject').value;
+  const levelSel = document.getElementById('filter-level');
+  if (subj && subjectLevels[subj]) {
+    levelSel.style.display = '';
+    levelSel.innerHTML = '<option value="">All levels</option>' + subjectLevels[subj].map(l=>`<option value="${l}">${l}</option>`).join('');
+  } else {
+    levelSel.style.display = 'none';
+    levelSel.value = '';
+  }
+  applyFilters();
+}
+
+// ── Apply all filters ──
+function applyFilters() {
+  const subj = document.getElementById('filter-subject').value;
+  const lvl  = document.getElementById('filter-level').value;
+  let filtered = tutorData;
+  if (subj)           filtered = filtered.filter(t => t.subjects.includes(subj));
+  if (lvl)            filtered = filtered.filter(t => t.levels.includes(lvl));
+  if (activeDays.size) filtered = filtered.filter(t => [...activeDays].every(d => t.availDays.includes(d)));
+  renderTutors(filtered);
+}
+
+// ── Tutor profile view ──
+function viewTutorProfile(name) {
+  const t = tutorData.find(x => x.name === name);
+  if (!t) return;
+  document.getElementById('profile-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.5rem">
+      <div class="tutor-avatar" style="width:72px;height:72px;font-size:1.6rem;background:${t.color};color:${t.textColor}">${t.initials}</div>
+      <div>
+        <div style="font-family:var(--serif);font-size:1.8rem;margin-bottom:2px">${t.name}</div>
+        <div style="color:var(--ink-muted);font-size:14px">${t.grade} · ★ ${t.rating}</div>
+      </div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem">
+      <div class="section-label" style="margin-bottom:6px">About</div>
+      <p style="font-size:14px;color:var(--ink-light);line-height:1.7">${t.bio}</p>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem">
+      <div class="section-label" style="margin-bottom:8px">Subjects & levels</div>
+      <div class="tutor-subjects">${t.subjects.map(s=>`<span class="subject-tag">${s}</span>`).join('')}</div>
+      <div style="font-size:13px;color:var(--ink-muted);margin-top:8px">${t.levels.join(' · ')}</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem">
+      <div class="section-label" style="margin-bottom:8px">Availability</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${t.availDays.map(d=>`<span style="padding:4px 12px;background:var(--sage-light);color:var(--sage-dark);border-radius:99px;font-size:13px;font-weight:500">${d}</span>`).join('')}</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem">
+      <div class="section-label" style="margin-bottom:12px">Reviews</div>
+      ${t.reviews.map(r=>`<div style="margin-bottom:12px;padding-bottom:12px;border-bottom:0.5px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:13px;font-weight:600">${r.name}</span>
+          <span style="color:var(--amber);font-size:13px">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span>
+        </div>
+        <p style="font-size:13px;color:var(--ink-light);line-height:1.6">${r.text}</p>
+      </div>`).join('')}
+    </div>
+    <button class="btn btn-primary btn-large btn-full" onclick="openBooking('${t.name}')">Request a session with ${t.name.split(' ')[0]}</button>
+  `;
+  goto('tutor-profile');
+}
+
+// ── Student profile view (tutor side) ──
+function viewStudentProfile(name, grade, subject, time) {
+  const initials = name.split(' ').map(w=>w[0]).join('');
+  document.getElementById('student-profile-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:1.5rem">
+      <div class="avatar" style="width:64px;height:64px;font-size:1.4rem">${initials}</div>
+      <div>
+        <div style="font-family:var(--serif);font-size:1.8rem;margin-bottom:2px">${name}</div>
+        <div style="color:var(--ink-muted);font-size:14px">${grade}</div>
+      </div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem">
+      <div class="section-label" style="margin-bottom:8px">Session info</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><div style="font-size:12px;color:var(--ink-muted);margin-bottom:2px">Subject</div><div style="font-size:15px;font-weight:500">${subject}</div></div>
+        <div><div style="font-size:12px;color:var(--ink-muted);margin-bottom:2px">Time</div><div style="font-size:15px;font-weight:500;color:var(--sage)">${time}</div></div>
+      </div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem">
+      <div class="section-label" style="margin-bottom:8px">About</div>
+      <p style="font-size:14px;color:var(--ink-light);line-height:1.7">No bio provided yet. Students can add a short note about their learning goals when requesting a session.</p>
+    </div>
+  `;
+  goto('student-profile');
+}
+
+// ── Navigation ──
+function goto(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── Landing → signup with role pre-set ──
+let selectedRole = 'student';
+function landingSignup(role) {
+  selectedRole = role;
+  document.getElementById('signup-role-label').textContent = role;
+  goto('signup');
+}
+function selectRole(role) {
+  selectedRole = role;
+  document.getElementById('signup-role-label').textContent = role;
+}
+function handleSignup() {
+  if (selectedRole === 'tutor') goto('tutor-setup');
+  else goto('student-matching');
+}
+
+// ── Tutor setup steps ──
+let setupStep = 0;
+function nextSetupStep() {
+  document.getElementById('setup-step-'+setupStep).classList.remove('active');
+  document.getElementById('dot-'+setupStep).classList.remove('active');
+  document.getElementById('dot-'+setupStep).classList.add('done');
+  setupStep++;
+  document.getElementById('setup-step-'+setupStep).classList.add('active');
+  const dot = document.getElementById('dot-'+setupStep);
+  if (dot) dot.classList.add('active');
+}
+function prevSetupStep() {
+  document.getElementById('setup-step-'+setupStep).classList.remove('active');
+  document.getElementById('dot-'+setupStep).classList.remove('active');
+  setupStep--;
+  document.getElementById('setup-step-'+setupStep).classList.add('active');
+  document.getElementById('dot-'+setupStep).classList.remove('done');
+  document.getElementById('dot-'+setupStep).classList.add('active');
+}
+function togglePill(el) { el.classList.toggle('selected'); }
+function toggleChip(el) { el.classList.toggle('selected'); }
+
+// ── Availability grid — vertical columns per day ──
+const availTimes = [
+  '8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM',
+  '12:00 PM','12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM',
+  '4:00 PM','4:30 PM','5:00 PM','5:30 PM','6:00 PM','6:30 PM','7:00 PM','7:30 PM',
+  '8:00 PM','8:30 PM','9:00 PM'
+];
+const availDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const fullAvailSlots = new Set([2,9,30]);
+
+function buildTimeGrid() {
+  const grid = document.getElementById('avail-grid');
+  if (!grid) return;
+  const cellStyle = 'border:0.5px solid var(--border);height:28px;display:flex;align-items:center;justify-content:center;';
+  let html = '';
+  // Header row: blank corner + day labels
+  html += `<div style="${cellStyle}background:var(--cream);"></div>`;
+  availDays.forEach(d => {
+    html += `<div style="${cellStyle}background:var(--cream);font-size:11px;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.05em">${d}</div>`;
+  });
+  // Time rows
+  availTimes.forEach((time, ti) => {
+    // time label
+    html += `<div style="${cellStyle}background:var(--cream);font-size:10px;color:var(--ink-muted);padding:0 4px;white-space:nowrap;justify-content:flex-end;padding-right:6px">${time}</div>`;
+    availDays.forEach((d, di) => {
+      const idx = ti * 7 + di;
+      const isFull = fullAvailSlots.has(idx);
+      if (isFull) {
+        html += `<div style="${cellStyle}background:var(--border);cursor:not-allowed;" title="At capacity"></div>`;
+      } else {
+        html += `<div class="avail-cell" style="${cellStyle}cursor:pointer;background:white;transition:background 0.1s;" onclick="toggleAvailCell(this)"></div>`;
+      }
+    });
+  });
+  grid.innerHTML = html;
+}
+buildTimeGrid();
+
+function toggleAvailCell(el) {
+  const on = el.dataset.on === '1';
+  el.dataset.on = on ? '0' : '1';
+  el.style.background = on ? 'white' : 'var(--sage)';
+}
+
+function editProfile() {
+  // Reset setup to step 0
+  for (let i = 0; i <= 2; i++) {
+    const step = document.getElementById('setup-step-'+i);
+    const dot  = document.getElementById('dot-'+i);
+    if (step) step.classList.remove('active');
+    if (dot)  { dot.classList.remove('active','done'); }
+  }
+  setupStep = 0;
+  document.getElementById('setup-step-0').classList.add('active');
+  document.getElementById('dot-0').classList.add('active');
+  goto('tutor-setup');
+}
+
+// ── Dashboard ──
+function showDashTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('dash-'+tab).classList.add('active');
+  event.target.closest('.sidebar-link').classList.add('active');
+}
+function toggleListing() {
+  const t = document.getElementById('listing-toggle');
+  t.classList.toggle('on');
+}
+function updateSlotLabel() {}
+
+// ── Request handling ──
+function acceptRequest(btn) {
+  const card = btn.closest('.request-card');
+  card.style.opacity = '0'; card.style.transition = 'opacity 0.3s';
+  setTimeout(() => card.remove(), 300);
+  const badge = document.querySelector('.badge-count');
+  if (badge) { const n = parseInt(badge.textContent)-1; badge.textContent = n; if(n===0) badge.style.display='none'; }
+}
+function declineRequest(btn) {
+  const card = btn.closest('.request-card');
+  card.style.opacity = '0'; card.style.transition = 'opacity 0.3s';
+  setTimeout(() => card.remove(), 300);
+  const badge = document.querySelector('.badge-count');
+  if (badge) { const n = parseInt(badge.textContent)-1; badge.textContent = n; if(n===0) badge.style.display='none'; }
+}
+
+// ── Booking modal ──
+function openBooking(name) {
+  document.getElementById('modal-tutor-name').textContent = 'Book '+name;
+  document.getElementById('booking-modal').classList.add('open');
+}
+function closeModal() { document.getElementById('booking-modal').classList.remove('open'); }
+function selectSlot(el) {
+  document.querySelectorAll('.slot-option').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function sendRequest() { closeModal(); goto('confirmation'); }
+
+document.getElementById('booking-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
